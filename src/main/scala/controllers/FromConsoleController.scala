@@ -1,16 +1,8 @@
 package controllers
 
-import domain.{Command, Mountains, PreviousPath, Rover}
-import views.Output
+import domain.{Command, Mountains, PreviousPath, Rover, State}
 
-class FromConsoleController(
-                             val rover: Rover,
-                             val prevPath: PreviousPath,
-                             val mountains: Mountains,
-                             val output: Output
-                           )
-  extends MovementController {
-  
+class FromConsoleController(state: State) extends MovementController {
   // TODO
-  override def go(commands: List[Command]): Unit = println("MovementController action")
+  override def go(commands: List[Command]): List[State] = Nil
 }

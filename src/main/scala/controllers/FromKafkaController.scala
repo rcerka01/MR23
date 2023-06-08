@@ -1,16 +1,8 @@
 package controllers
 
-import domain.{Command, Mountains, PreviousPath, Rover}
-import views.Output
+import domain.{Command, Mountains, PreviousPath, Rover, State}
 
-class FromKafkaController(
-                           val rover: Rover,
-                           val prevPath: PreviousPath,
-                           val mountains: Mountains,
-                           val output: Output
-                         )
-  extends MovementController {
-  
+class FromKafkaController(state: State) extends MovementController {
   // TODO
-  override def go(commands: List[Command]): Unit = println("FromKafkaController action")
+  override def go(commands: List[Command]): List[State] = Nil
 }

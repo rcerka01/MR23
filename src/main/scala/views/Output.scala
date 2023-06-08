@@ -1,7 +1,7 @@
 package views
 
-import domain.{Mountains, PreviousPath, Rover}
+import domain.{Mountains, PreviousPath, Rover, State}
 
 trait Output {
-   def deliver(rover: Rover, previousPath: PreviousPath, mountins: Mountains): Unit
+   def deliver(frames: List[State]): Unit
 }

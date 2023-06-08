@@ -1,16 +1,13 @@
 package controllers
 
-import domain.{Command, Mountains, PreviousPath, Rover}
-import views.Output
+import domain.{Command, Mountains, PreviousPath, Rover, State}
 
-class FromConfigController(
-                            val rover: Rover,
-                            val prevPath: PreviousPath,
-                            val mountains: Mountains,
-                            val output: Output
-                          )
-  extends MovementController {
-  
+class FromConfigController(state: State) extends MovementController {
   // TODO
-  override def go(commands: List[Command]): Unit = println("FromConfigController action")
+  override def go(commands: List[Command]): List[State] = Nil
+//    commands.foreach { command =>
+//
+//      println(command)
+//
+//    }
 }

@@ -1,13 +1,7 @@
 package controllers
 
-import domain.{Command, Coordinates, Mountains, PreviousPath, Rover}
-import views.Output
+import domain.{Command, Coordinates, Mountains, PreviousPath, Rover, State}
 
 trait MovementController {
-  val rover: Rover
-  val prevPath: PreviousPath
-  val mountains: Mountains
-  val output: Output
-
-  def go(commands: List[Command]): Unit
+  def go(commands: List[Command]): List[State]
 }

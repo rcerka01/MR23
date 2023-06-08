@@ -1,17 +1,10 @@
 package controllers
 
-import domain.{Command, Coordinates, Mountains, PreviousPath, Rover}
-import views.Output
+import domain.{Command, Coordinates, Mountains, PreviousPath, Rover, State}
 
-class FromAutopilotController(
-                               val rover: Rover,
-                               val prevPath: PreviousPath,
-                               val mountains: Mountains,
-                               val output: Output
-                             )
-  extends MovementController {
+class FromAutopilotController(state: State) extends MovementController {
   // TODO
   def calculateDirections(rover: Rover, target: Coordinates): List[Command] = Nil
   // TODO
-  override def go(commands: List[Command]): Unit = println("FromAutopiloControllert action")
+  override def go(commands: List[Command]): List[State] = Nil
 }
