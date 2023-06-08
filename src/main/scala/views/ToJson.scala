@@ -1,7 +1,7 @@
 package views
 
-import domain.Rover
+import domain.{Mountains, PreviousPath, Rover}
 
 class ToJson extends Output {
-  val rover: Rover = ???
+  def deliver(rover: Rover, previousPath: PreviousPath, mountins: Mountains): Unit = ???
 }
