@@ -1,7 +1,7 @@
 package config
 
 import com.typesafe.config.{Config, ConfigFactory}
-import domain.{Coordinates, Mountains}
+import domain.{Command, Coordinates, Direction, Mountains}
 
 import scala.jdk.CollectionConverters.*
 import java.util
@@ -14,11 +14,13 @@ object Config {
 
   lazy val startPositionX: Int = config.getInt("start_position_x")
   lazy val startPositionY: Int = config.getInt("start_position_y")
+  lazy val startDirection: Direction = Direction.valueOf(config.getString("start_direction"))
 
-
-  val mountainsConfigList: List[Config] = config.getConfigList("mountains").asScala.toList
-  val mountainsCoordinates: List[Coordinates] = mountainsConfigList.map { mountainConfig =>
+  lazy val mountainsConfigList: List[Config] = config.getConfigList("mountains").asScala.toList
+  lazy val mountainsCoordinates: List[Coordinates] = mountainsConfigList.map { mountainConfig =>
     Coordinates(mountainConfig.getInt("x"), mountainConfig.getInt("y"))
   }
 
+  lazy val commandsConfigList: List[String] = config.getStringList("commands").asScala.toList
+  lazy val commands: List[Command] = commandsConfigList.map(Command.valueOf)
 }

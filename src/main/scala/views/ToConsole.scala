@@ -4,7 +4,7 @@ import config.Config
 import config.Config.{gridSizeX, gridSizeY}
 import domain.{Coordinates, Mountains, PreviousPath, Rover}
 
-class ToConsole(rover: Rover, previousPath: PreviousPath, mountins: Mountains) {
+class ToConsole(val rover: Rover, previousPath: PreviousPath, mountins: Mountains) extends Output {
   val roverSign = "R"
   val mountainSign = "M"
   val prevPathSign = "*"
