@@ -1,4 +1,6 @@
-package domain
+package itv.dispatch.domain
+
+import itv.dispatch.config.Config.{gridSizeX, gridSizeY}
 
 enum Direction(val value: Int):
   case North extends Direction(1)

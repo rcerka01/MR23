@@ -1,7 +1,7 @@
-package config
+package itv.dispatch.config
 
 import com.typesafe.config.{Config, ConfigFactory}
-import domain.{Command, Coordinates, Direction, Mountains}
+import itv.dispatch.domain.{Command, Coordinates, Direction, Mountains}
 
 import scala.jdk.CollectionConverters.*
 import java.util
@@ -21,6 +21,5 @@ object Config {
     Coordinates(mountainConfig.getInt("x"), mountainConfig.getInt("y"))
   }
 
-  private lazy val commandsConfigList: List[String] = config.getStringList("commands").asScala.toList
-  lazy val commandsConf: List[Command] = commandsConfigList.map(Command.valueOf)
+  lazy val commandsConfigList: List[String] = config.getStringList("commands").asScala.toList
 }

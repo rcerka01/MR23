@@ -1,21 +1,41 @@
-import config.Config.*
-import controllers.{FromAutopilotController, FromConfigController, MovementController}
-import domain.{Coordinates, Direction, Mountains, PreviousPath, Rover, State}
-import views.{Output, ToConsole}
+import itv.dispatch.config.Config.{
+  commandsConfigList,
+  mountainsCoordConf,
+  startDirectionConf,
+  startPositionXconf,
+  startPositionYconf
+}
+import itv.dispatch.controllers.{
+  FromAutopilotController,
+  FromConfigController,
+  MovementController
+}
+import itv.dispatch.domain
+import itv.dispatch.domain.{
+  Coordinates,
+  Direction,
+  Mountains,
+  PreviousPath,
+  Rover,
+  State
+}
+import itv.dispatch.views.{Output, ToConsole}
 
 object Main extends App {
-  private val rover = Rover(Coordinates(startPositionXconf, startPositionYconf), startDirectionConf)
-  private val mountains = Mountains(mountainsCoordConf)
+  private val rover = Rover(
+    Coordinates(startPositionXconf, startPositionYconf),
+    startDirectionConf
+  )
+  private val mountains = domain.Mountains(mountainsCoordConf)
   private val prevPath = PreviousPath(Nil)
+  private val initState = State(rover, prevPath, mountains)
 
-  private val initState  = State(rover, prevPath, mountains)
+  //ToConsole(List(initState))
 
-  // from conf
-  private val movementController: MovementController = new FromConfigController(initState)
-  ToConsole.deliver(movementController.go(commandsConf))
+  // from config
+  private val movementController: MovementController = FromConfigController
+  private val commands = movementController.getCommands(commandsConfigList)
+  private val moves = movementController.go(commands, initState)
+  ToConsole(moves)
 
-//  // from autopilot
-//  private val target = Coordinates(5,5)
-//  private val movementController: FromAutopilotController = new FromAutopilotController(initState)
-//  ToConsole.deliver(movementController.go(movementController.calculateDirections(rover, target)))
 }
