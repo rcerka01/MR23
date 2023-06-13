@@ -7,7 +7,7 @@ import scala.::
 
 class CommandError(msg: String) extends Error(msg)
 
-object FromConfigController extends MovementController {
-  def getCommands[String](source: List[String]): List[Command] =
+object FromConfigController extends MovementController[String] {
+  def commandInterpreter(source: List[String]): List[Command] =
     commandsConfigList.map(Command.valueOf)
 }

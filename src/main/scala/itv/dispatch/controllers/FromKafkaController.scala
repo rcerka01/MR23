@@ -2,7 +2,7 @@ package itv.dispatch.controllers
 
 import itv.dispatch.domain.{Command, State}
 
-class FromKafkaController(state: State) extends MovementController {
+class FromKafkaController(state: State) extends MovementController[Any] {
   // TODO
-  override def getCommands[A](source: List[A]): List[Command] = ???
+  override def commandInterpreter(source: List[Any]): List[Command] = ???
 }

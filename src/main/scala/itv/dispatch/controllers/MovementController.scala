@@ -2,9 +2,8 @@ package itv.dispatch.controllers
 
 import itv.dispatch.domain.{Command, Coordinates, Direction, Mountains, PreviousPath, Rover, State}
 
-trait MovementController {
-  
-  def getCommands[A](source: List[A]): List[Command]
+trait MovementController[A] {
+  def commandInterpreter(source: List[A]): List[Command]
   
   private def positionRover(command: Command, rover: Rover): Rover =
     command match {
@@ -41,7 +40,6 @@ trait MovementController {
           case Direction.South => rover.copy(direction = Direction.East)
           case Direction.West => rover.copy(direction = Direction.South)
         }
-      case _ => throw new CommandError("Unrecognised command.")
     }
 
   def go(commands: List[Command], initState: State): List[State] =
