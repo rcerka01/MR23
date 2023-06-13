@@ -38,10 +38,12 @@ object Main {
     choice match {
       case "1" =>
         val commands: List[String] = commandsConfigList
-        val moves: List[State] = go(commandInterpreter(commands), initState)
+        val moves: List[State] =
+          FromConfigController.go(commandInterpreter(commands), initState)
         ToConsole(moves)
-        runConsole(initState)
+        runConsole(moves.last)
       case "2" =>
+        ToConsole(FromConsoleController.go(Nil, initState))
         runConsoleInput(initState)
         runConsole(initState)
       case "3" =>
