@@ -6,7 +6,6 @@ import itv.dispatch.views
 import itv.dispatch.views.ToConsole
 
 class ToConsoleFormatersSpec extends AnyFlatSpec {
-
   val spaceX = 10
   val spaceY = 10
 

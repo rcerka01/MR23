@@ -5,7 +5,7 @@ import itv.dispatch.domain.{Command, Coordinates, Direction, Mountains, Previous
 trait MovementController[A] {
   def commandInterpreter(source: List[A]): List[Command]
   
-  private def positionRover(command: Command, rover: Rover): Rover =
+  def positionRover(command: Command, rover: Rover): Rover =
     command match {
       case Command.Forward =>
         rover.direction match {
