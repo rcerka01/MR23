@@ -14,12 +14,23 @@ object Config {
 
   lazy val startPositionXconf: Int = config.getInt("start_position_x")
   lazy val startPositionYconf: Int = config.getInt("start_position_y")
-  lazy val startDirectionConf: Direction = Direction.valueOf(config.getString("start_direction"))
+  lazy val startDirectionConf: Direction =
+    Direction.valueOf(config.getString("start_direction"))
 
-  private lazy val mountainsConfigList: List[Config] = config.getConfigList("mountains").asScala.toList
-  lazy val mountainsCoordConf: List[Coordinates] = mountainsConfigList.map { mountainConfig =>
-    Coordinates(mountainConfig.getInt("x"), mountainConfig.getInt("y"))
+  private lazy val mountainsConfigList: List[Config] =
+    config.getConfigList("mountains").asScala.toList
+  lazy val mountainsCoordConf: List[Coordinates] = mountainsConfigList.map {
+    mountainConfig =>
+      Coordinates(mountainConfig.getInt("x"), mountainConfig.getInt("y"))
   }
 
-  lazy val commandsConfigList: List[String] = config.getStringList("commands").asScala.toList
+  lazy val commandsConfigList: List[String] =
+    config.getStringList("commands").asScala.toList
+
+  lazy val kafkaTopic: String = config.getString("kafka.topic-name")
+  lazy val kafkaBootstrapServers: String =
+    config.getString("kafka.bootstrap-servers")
+  lazy val kafkaGroupId: String = config.getString("kafka.group-id")
+  lazy val kafkaPollFrequencyMilliseconds: Int =
+    config.getInt("kafka.poll-frequency-milliseconds")
 }

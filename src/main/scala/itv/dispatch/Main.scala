@@ -1,37 +1,29 @@
-import itv.dispatch.config.Config.{
-  commandsConfigList,
-  mountainsCoordConf,
-  startDirectionConf,
-  startPositionXconf,
-  startPositionYconf
-}
+package itv.dispatch
+
+import itv.dispatch.Context.*
+import itv.dispatch.config.Config.*
 import itv.dispatch.controllers.FromConfigController.{commandInterpreter, go}
 import itv.dispatch.controllers.FromConsoleController.runConsoleInput
-import itv.dispatch.controllers.{
-  FromAutopilotController,
-  FromConfigController,
-  FromConsoleController,
-  MovementController
-}
+import itv.dispatch.controllers.*
 import itv.dispatch.domain
 import itv.dispatch.domain.Command.{Anticlockwise, Clockwise, Forward}
-import itv.dispatch.domain.{
-  Command,
-  Coordinates,
-  Direction,
-  Mountains,
-  PreviousPath,
-  Rover,
-  State
-}
+import itv.dispatch.domain.*
 import itv.dispatch.views.{Output, ToConsole}
 
+import java.time.Duration
+import scala.concurrent.Future
 import scala.io.StdIn
+import scala.util.Random
+import scala.util.Random.nextInt
+import scala.util.control.Breaks.{break, breakable}
+implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
+
 
 object Main {
-  def runConsole(initState: State): Unit = {
+
+  def mainMenu(initState: State): Unit = {
     println(
-      "Enter input source: 1 for Config, 2 for Console, 3 for Kafka, 4 for Autopilot, 5 for exit"
+      "Enter input source: 1 for Config, 2 for Console, 3 for Kafka, 4 for Autopilot, q for exit"
     )
     val choice = StdIn.readLine().toLowerCase()
     // important to keep correct imports
@@ -41,22 +33,26 @@ object Main {
         val moves: List[State] =
           FromConfigController.go(commandInterpreter(commands), initState)
         ToConsole(moves)
-        runConsole(moves.last)
+        mainMenu(moves.last)
       case "2" =>
         ToConsole(FromConsoleController.go(Nil, initState))
         runConsoleInput(initState)
-        runConsole(initState)
+        mainMenu(initState)
       case "3" =>
-        println("kafka")
-        runConsole(initState)
+        kafka.subscribe()
+        val pollFrequency = Duration.ofMillis(kafkaPollFrequencyMilliseconds)
+        FromKafkaController.pollAndCommit(pollFrequency, ToConsole, initState)
+        mainMenu(initState)
       case "4" =>
         println("autopilot")
-        runConsole(initState)
-      case "5" =>
+        mainMenu(initState)
+      case "q" =>
+        kafka.closeProducer()
+        kafka.closeConsumer()
         println("Exiting...")
       case _ =>
         println("Invalid choice!")
-        runConsole(initState)
+        mainMenu(initState)
     }
   }
 
@@ -69,6 +65,6 @@ object Main {
     val prevPath = PreviousPath(Nil)
     val initState = State(rover, prevPath, mountains)
 
-    runConsole(initState)
+    mainMenu(initState)
   }
 }
