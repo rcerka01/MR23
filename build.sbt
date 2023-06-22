@@ -8,6 +8,7 @@ lazy val root = (project in file("."))
   )
 
 libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-core" % "2.9.0",
   "com.typesafe" % "config" % "1.4.2",
   "org.apache.kafka" % "kafka-clients" % "3.4.0",
 //  "org.slf4j" % "slf4j-api" % "2.0.5",

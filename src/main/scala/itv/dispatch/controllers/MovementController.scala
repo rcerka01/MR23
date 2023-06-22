@@ -1,10 +1,21 @@
 package itv.dispatch.controllers
 
-import itv.dispatch.domain.{Command, Coordinates, Direction, Mountains, PreviousPath, Rover, State}
+import cats.data.{NonEmptyList, Validated}
+import itv.dispatch.domain.State.validate
+import itv.dispatch.domain.{
+  Command,
+  Coordinates,
+  Direction,
+  Mountains,
+  PreviousPath,
+  Rover,
+  State,
+  StateError
+}
 
 trait MovementController[A] {
   def commandInterpreter(source: List[A]): List[Command]
-  
+
   def positionRover(command: Command, rover: Rover): Rover =
     command match {
       case Command.Forward =>
@@ -29,16 +40,16 @@ trait MovementController[A] {
       case Command.Clockwise =>
         rover.direction match {
           case Direction.North => rover.copy(direction = Direction.East)
-          case Direction.East => rover.copy(direction = Direction.South)
+          case Direction.East  => rover.copy(direction = Direction.South)
           case Direction.South => rover.copy(direction = Direction.West)
-          case Direction.West => rover.copy(direction = Direction.North)
+          case Direction.West  => rover.copy(direction = Direction.North)
         }
       case Command.Anticlockwise =>
         rover.direction match {
           case Direction.North => rover.copy(direction = Direction.West)
-          case Direction.East => rover.copy(direction = Direction.North)
+          case Direction.East  => rover.copy(direction = Direction.North)
           case Direction.South => rover.copy(direction = Direction.East)
-          case Direction.West => rover.copy(direction = Direction.South)
+          case Direction.West  => rover.copy(direction = Direction.South)
         }
     }
 
@@ -48,10 +59,17 @@ trait MovementController[A] {
       val newPrevPath: PreviousPath = acc.last.previousPath.copy(coordinates =
         acc.last.previousPath.coordinates :+ acc.last.rover.coordinates
       )
-      acc :+ State(
+      val newState = State(
         rover = newRover,
         previousPath = newPrevPath,
         mountains = acc.last.mountains
       )
+
+      validate(newState).toEither match {
+        case Right(s: State) => acc :+ s
+        case Left(e) =>
+          e.map(err => println(err.msg))
+          acc
+      }
     })
 }
